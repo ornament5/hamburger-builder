@@ -21,20 +21,25 @@ class BurgerBuilder extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ingredients: {
-                salad:0,
-                bacon:0,
-                cheese:0,
-                meat:0
-            },
+            ingredients: {} ,
             totalPrice: 4,
             purchaseable: false,
             purchasing: false,
-            loading:false
+            loading:false,
+            error: false
 
         }
     }
 
+    componentDidMount () {
+        axios.get('https://react-burger-app-49094.firebaseio.com/ingredients.json')
+            .then(response => {
+                this.setState({ingredients:response.data});
+            })
+            .catch( error => {
+                this.setState({error:true});
+            });
+    }
     updatePurchaseState = (ingredients) => {
         const sum = Object.keys(ingredients)
             .map(ingredientKey => {
