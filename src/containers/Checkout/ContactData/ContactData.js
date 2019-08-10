@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from '../../../axios-orders';
 import classes from './ContactData.css';
+import { connect } from 'react-redux';
+import * as actionTypes from '../../../store/actions';
 
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
@@ -114,6 +116,7 @@ class ContactData extends Component {
                 this.setState({
                     loading:false
                 });
+                this.props.onSubmitOrder();
                 this.props.history.push('/');
             })
             .catch(error => {
@@ -123,15 +126,12 @@ class ContactData extends Component {
 
     checkValidity = (value, rules) => {
          let isValid = true;
-
          if(rules.required) {
              isValid = value.trim() !== '' && isValid;
          }
-
          if(rules.minLength) {
             isValid = value.trim().length >= rules.minLength && isValid;
         }
-
          return isValid;
     }
 
@@ -192,4 +192,17 @@ class ContactData extends Component {
     }
 }
 
-export default ContactData;
+const mapStateToProps = state => {
+    return {
+        ingredients: state.ingredients,
+        price: state.totalPrice
+    };
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSubmitOrder: () => dispatch({type:actionTypes.RESET_INGREDIENTS})
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactData);
