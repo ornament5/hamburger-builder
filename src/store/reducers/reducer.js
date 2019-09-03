@@ -41,7 +41,8 @@ const reducer = (state = initialState, action) => {
             };
         case actionTypes.RESET_INGREDIENTS:
             return initialState;
-               
+            
+            
         default:
             return state;    
     }
